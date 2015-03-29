@@ -1429,7 +1429,32 @@ sudo cp /vagrant/openrc /home/vagrant
 service neutron-server restart
 
 
+##################################### 
+# Chapter 12 - Production OpenStack #
+# Corosync + Pacemaker              #
+#####################################
+apt-get -y install corosync pacemaker
 
+sed -i 's/127.0.0.1/172.16.0.0/g' /etc/corosync/corosync.conf
+sed -i 's/^START=no/START=yes/g' /etc/default/corosync
+
+# Generate the etropy for corosync only on controller1
+if [[ $(hostname -s) = "controller1" ]]
+then
+	while [ ! -f /etc/corosync/authkey ]; do dd if=/dev/urandom of=/tmp/100 bs=1024 count=100000; for i in {1..10}; do cp /tmp/100 /tmp/tmp_$i_$RANDOM; done; rm -f /tmp/tmp_* /tmp/100; done & /usr/sbin/corosync-keygen
+	cp /etc/corosync/authkey /vagrant
+else
+	# Must be controller2 so cp key in place that controller1 generated
+	if [[ -f /vagrant/authkey ]]
+	then
+		cp /vagrant/aythkey /etc/corosync
+		chown root:root /etc/corosync/authkey
+		chmod +r /etc/corosync/authkey
+	fi
+fi
+
+sudo service pacemaker start
+sudo service corosync start
 
 # Sort out keys for root user
 sudo ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa

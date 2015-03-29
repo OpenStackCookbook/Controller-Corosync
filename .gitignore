@@ -1,0 +1,15 @@
+authkey
+ca-controller1.pem
+ca-controller2.pem
+ca.pem
+cakey-controller1.pem
+cakey-controller2.pem
+cakey.pem
+cirros-0.3.0-x86_64-disk.img
+id_rsa
+id_rsa.pub
+openrc
+openrc-controller1
+openrc-controller2
+trusty-server-cloudimg-amd64-disk1.img
+vagrant
