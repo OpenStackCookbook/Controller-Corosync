@@ -49,6 +49,7 @@ then
 # CookbookHosts
 192.168.100.221	controller1.book controller1
 192.168.100.222	controller1.book controller1
+192.168.100.253	controller.book controller
 192.168.100.211	cinder.book cinder" | sudo tee -a /etc/hosts
 fi
 
